@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,6 +26,11 @@ SECRET_KEY = "django-insecure-wp7&j@ahe$sj)w29cct9x)zh0h9__&_ss3)$qj($8unccgb_#g
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+# Media
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Application definition
