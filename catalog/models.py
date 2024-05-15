@@ -42,7 +42,10 @@ class Product(models.Model):
         null=True,
         related_name='products',
     )
-    price = models.FloatField(verbose_name="Цена",help_text="Введите описание")
+    price = models.FloatField(
+        verbose_name="Цена",
+        help_text="Введите описание"
+    )
     created_at = models.DateField(
         blank=True,
         null=True,
@@ -56,6 +59,17 @@ class Product(models.Model):
     manufactured_at = models.DateField(
         blank=True, null=True, verbose_name="Дата производства продукта"
     )
+    slug = models.SlugField(
+        blank=True,
+        null=True,
+        max_length=150,
+        unique=True,
+        verbose_name="slug"
+    )
+    viewed = models.IntegerField(
+        default=0,
+        verbose_name='Количество просмотров'
+    )
 
     class Meta:
         verbose_name = "Продукт"
@@ -64,4 +78,3 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
