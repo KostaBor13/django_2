@@ -8,14 +8,14 @@
 <div class="py-12 text-center container">
     <div class="row align-items-center">
         <div class="col-md-8 offset-md-2">
-            <div class="card mb-4 box-shadow bg-light">
+            <div class="card mb-4 box-shadow ">
                 <p class="card-text">Хочешь удалить {{ object.name }}?</p>
                 <div class="card-body">
                     <form class="row" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="col">
                             <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Удалить</button>
-                            <a class="btn btn-lg btn-block btn-outline-danger" href="{% url 'catalog:product_list'%}"
+                            <a class="btn btn-lg btn-block btn-outline-danger" href="{% url 'BLOG:blog_list'%}"
                                role="button">ОТМЕНИТЬ</a>
                         </div>
                     </form>

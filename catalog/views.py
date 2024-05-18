@@ -19,6 +19,7 @@ class ProductDetailView(DetailView):
         self.object.save()
         return self.object
 
+
 class ProductCreateView(CreateView):
     model = Product
     fields = ['name', 'description', 'photo', 'price', 'category']
@@ -36,6 +37,7 @@ class ProductCreateView(CreateView):
 class ProductUpdateView(UpdateView):
     model = Product
     fields = ['name', 'description', 'photo', 'price', 'category']
+
     # success_url = reverse_lazy('catalog:product_list')
 
     def get_success_url(self):
@@ -50,12 +52,9 @@ class ProductUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-
 class ProductDeleteView(DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:product_list')
-
-
 
 
 def base(request):
@@ -74,12 +73,7 @@ def contacts(request):
         with open('write.txt', 'wt', encoding='UTF-8') as file:
             file.write(f'Ваше сообщение: {name}, {phone}, {message}')
 
-    return render(request, 'catalog/contacts.html')
-
-
-
-
-
+    return render(request, 'catalog/contacts_detail.html')
 
 # def product_list(request):
 #     products = Product.objects.all()
@@ -98,4 +92,4 @@ def contacts(request):
 #
 #
 # def contacts(request):
-#     return render(request, "catalog/contacts.html")
+#     return render(request, "catalog/contacts_detail.html")
