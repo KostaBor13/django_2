@@ -7,6 +7,7 @@
     <div class="container">
         <div class="row">
             <div class="сol text-center">
+
                 <a class="btn btn-primary mb-5" href="{% url 'catalog:product_create' %}" role="button">Добавить
                     продукт</a>
             </div>
@@ -14,18 +15,22 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {% for product in object_list %}
             <div class="col">
-                <div class="card shadow-sm">
-                    <img src="{{ product.photo | media_filter }}">
+                <div class="card shadow-sm" style="width:100%;height:100%;background-size:cover">
+                    <img src="{{ product.photo | media_filter }}" style="width:100%; height:100%; object-fit: cover">
                     <div class="card-body">
-                        <p class="card-text">{{ object.name }}</p>
-                        <p class="card-text"> {{ object.description|slice:100 }} </p>
+                        <p class="card-text">{{ product.name }}</p>
+                        <ul>
+                        <li> Категория : {{ product.category }}</li>
+                        <li> Активная версия: {{ product.active_version }} </li>
+                        </ul>
+                        <p class="card-text"> {{ product.description|slice:25 }} </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a class="btn btn-light" href="{% url 'catalog:product_detail' product.pk %}"
+                                <a class="btn btn-light m-1" href="{% url 'catalog:product_detail' product.pk %}"
                                    role="button">Просмотр</a>
-                                <a class="btn btn-primary" href="{% url 'catalog:product_update' product.pk %}"
+                                <a class="btn btn-primary m-1" href="{% url 'catalog:product_update' product.pk %}"
                                    role="button">Редактирование</a>
-                                <a class="btn btn-danger" href="{% url 'catalog:product_delete' product.pk %}"
+                                <a class="btn btn-danger m-1" href="{% url 'catalog:product_delete' product.pk %}"
                                    role="button">Удалить</a>
                             </div>
                             <small class="text-body-secondary"></small>

@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col text-center">
-                <a class="btn btn-primary mb-5" href="{% url 'catalog:product_create' %}" role="button">Добавить BLOG</a>
+                <a class="btn btn-primary mb-5" href="{% url 'BLOG:blog_create' %}" role="button">Добавить BLOG</a>
             </div>
         </div>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -18,13 +18,20 @@
 
                         <p class="card-text"> {{ object.description|slice:100 }} </p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
+                            <div class="d-flex flex-wrap justify-content-around">
                                 <a class="btn btn-light" href="{% url 'BLOG:blog_detail' blog.pk %}" role="button">Просмотр</a>
                                 <a class="btn btn-primary" href="{% url 'BLOG:blog_update' blog.pk %}" role="button">Редактирование</a>
                                 <a class="btn btn-danger" href="{% url 'BLOG:blog_delete' blog.pk %}" role="button">Удалить</a>
+                                {% if blog.is_active %}
+                                <a class="btn btn-warning mt-1" href="{% url 'BLOG:toggle_active' blog.pk %}" role="button">Деактивировать</a>
+                                {% else %}
+                                <a class="btn btn-success mt-1" href="{% url 'BLOG:toggle_active' blog.pk %}" role="button">Активировать</a>
+                                {% endif %}
                             </div>
+
                             <small class="text-body-secondary"></small>
                         </div>
+
                     </div>
                 </div>
             </div>

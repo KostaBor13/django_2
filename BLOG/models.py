@@ -35,6 +35,7 @@ class Blog(models.Model):
         default=0,
         verbose_name='Просмотров'
     )
+    is_active = models.BooleanField(default=True, verbose_name='Активен')
 
     class Meta:
         verbose_name = "Блог"

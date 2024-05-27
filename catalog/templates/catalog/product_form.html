@@ -2,7 +2,6 @@
 {% block content %}
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-
     <h1 class="display-4">
         {% if object %}
         Редактировать
@@ -13,27 +12,41 @@
 </div>
 
 <div class="container">
-    <div class="row">
+    <form class="row" method="POST" enctype="multipart/form-data">
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="card mb-4 box-shadow">
+                {% if object %}
+                <p class="card-text">Редактирование</p>
+                {% else %}
+                <p class="card-text">Добавление</p>
+                {% endif %}
                 <div class="card-body">
-                    <form class="row" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <div class="col">
-                            <button type="submit" class="btn btn-lg btn-block btn-outline-primary">
-                                {% if object %}
-                                Сохранить
-                                {% else %}
-                                Создать
-                                {% endif %}
-                            </button>
-                        </div>
-                    </form>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="col">
+                        <button type="submit" class="btn btn-lg btn-block btn-outline-primary">
+                            {% if object %}
+                            Сохранить
+                            {% else %}
+                            Добавить
+                            {% endif %}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <div class="card mb-4 box-shadow">
+                <p class="card-text">Версия</p>
+                <div class="card-body">
+                    {{ formset.management_form }}
+                    {% for form in formset.forms %}
+                    {{ form.as_p }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 
 {% endblock %}

@@ -1,7 +1,9 @@
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
 
+import BLOG
 from BLOG.models import Blog
 
 
@@ -55,3 +57,14 @@ class BlogUpdateView(UpdateView):
 class BlogDeleteView(DeleteView):
     model = Blog
     success_url = reverse_lazy('BLOG:blog_list')
+
+
+def toggle_active(request, pk):
+    """Переключает активность товара"""
+    blog = get_object_or_404(Blog, pk=pk)
+    if blog.is_active:
+        blog.is_active = False
+    else:
+        blog.is_active = True
+    blog.save()
+    return redirect('BLOG:blog_list')
