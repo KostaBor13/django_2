@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.urls import path
 from catalog.apps import CatalogConfig
 from catalog.views import ProductListView, ProductDetailView, ProductCreateView, ProductUpdateView, \
     ProductDeleteView, contacts

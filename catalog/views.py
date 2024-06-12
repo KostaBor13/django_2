@@ -1,6 +1,7 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
 
@@ -8,7 +9,7 @@ from catalog.forms import ProductForm
 from catalog.models import Product, Version
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
 
     def get_context_data(self, *args, **kwargs):
@@ -20,13 +21,15 @@ class ProductListView(ListView):
             active_versions = versions.filter(is_actual=True)
             if active_versions:
                 product.active_version = active_versions.last().version_number
+                product.active_version_name = active_versions.last().name
             else:
                 product.active_version = 'Нет активной версии'
 
         context_data['object_list'] = products
         return context_data
 
-class ProductDetailView(DetailView):
+
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
     def get_object(self, queryset=None):
@@ -50,21 +53,23 @@ class ProductDetailView(DetailView):
 
         return context
 
-class ProductCreateView(CreateView):
+
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
 
     def form_valid(self, form):
-        if form.is_valid():
-            new_mat = form.save()
-            new_mat.slug = slugify(new_mat.name)
-            new_mat.save()
+        if form.is_valid:
+            new_object = form.save(commit=False)
+            new_object.owner = self.request.user
+            new_object.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
-        return super().form_valid(form)
 
-
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
@@ -91,17 +96,9 @@ class ProductUpdateView(UpdateView):
             return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
-    #
-    # def form_valid(self, form):
-    #     if form.is_valid():
-    #         new_mat = form.save()
-    #         new_mat.slug = slugify(new_mat.name)
-    #         new_mat.save()
-    #
-    #     return super().form_valid(form)
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:product_list')
 
@@ -124,21 +121,4 @@ def contacts(request):
 
     return render(request, 'catalog/contacts_detail.html')
 
-# def product_list(request):
-#     products = Product.objects.all()
-#     context = {"products": products}
-#     return render(request, 'catalog/base.html', context)
-#
-#
-# def product_detail(request, pk):
-#     product_pk = get_object_or_404(Product, pk=pk)
-#     context = {"product": product_pk}
-#     return render(request, 'catalog/product_detail.html', context)
 
-
-# def index(request):
-#     return render(request, "catalog/home.html")
-#
-#
-# def contacts(request):
-#     return render(request, "catalog/contacts_detail.html")
