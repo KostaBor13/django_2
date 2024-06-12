@@ -1,0 +1,1 @@
+[{"model": "BLOG.blog", "pk": 1, "fields": {"name": "Гриша", "description": "вава", "photo": "blog/photo/i_4.webp", "created_at": null, "updated_at": null, "slug": "grisha", "viewed": 10, "is_active": false}}]
