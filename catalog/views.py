@@ -1,11 +1,13 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
 
-from catalog.forms import ProductForm
+from catalog.forms import ProductForm, ProductModeratorForm
 from catalog.models import Product, Version
 
 
@@ -97,6 +99,14 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         else:
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if (user.has_perm('catalog.can_edit_category') and user.has_perm('catalog.can_edit_description') and
+                user.has_perm('catalog.can_edit_is_active')):
+            return ProductModeratorForm
+        raise PermissionDenied
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
@@ -108,7 +118,7 @@ def base(request):
     context = {"products": products}
     return render(request, "catalog/product_list.html", context)
 
-
+@login_required
 def contacts(request):
     """Принимает контактные данные от пользователя с сайта"""
     if request.method == 'POST':

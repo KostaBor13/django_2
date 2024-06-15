@@ -1,4 +1,7 @@
+
+
 from django.db import models
+from django.utils import timezone
 
 from users.models import User
 
@@ -48,19 +51,19 @@ class Product(models.Model):
         verbose_name="Цена",
         help_text="Введите описание"
     )
-    created_at = models.DateField(
-        blank=True,
-        null=True,
-        verbose_name="Дата создание записи",
-        help_text="Укажите дату создания",
-    )
-    updated_at = models.DateField(
-        blank=True, null=True, verbose_name="Дата последнего изменения"
-    )
+    created_at = models.DateTimeField(
+        default=timezone.now,
+        verbose_name='Дата создания')
+
+    updated_at = models.DateTimeField(
+        default=timezone.now,
+        verbose_name='Дата изменения')
 
     manufactured_at = models.DateField(
         blank=True, null=True, verbose_name="Дата производства продукта"
     )
+    is_active = models.BooleanField(default=True, verbose_name='Активен')
+
     slug = models.SlugField(
         blank=True,
         null=True,
@@ -68,6 +71,7 @@ class Product(models.Model):
         unique=True,
         verbose_name="slug"
     )
+
     viewed = models.IntegerField(
         default=0,
         verbose_name='Количество просмотров'
@@ -83,7 +87,11 @@ class Product(models.Model):
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
         ordering = ["name", "category", "created_at", "updated_at"]
-
+        permissions = [
+            ("can_edit_category", "Edit Category"),
+            ("can_edit_description", "Edit Description"),
+            ("can_edit_is_active", "Edit Is Active")
+        ]
     def __str__(self):
         return self.name
 

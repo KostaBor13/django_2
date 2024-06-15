@@ -34,3 +34,10 @@ class ProductForm(StyleFormMixin, ModelForm):
         if description.lower() in self.error_word:
             raise forms.ValidationError('Запрещенные слова')
         return description
+
+
+class ProductModeratorForm(StyleFormMixin, ModelForm):
+    """Форма для редактирования модератором"""
+    class Meta:
+        model = Product
+        fields = ('category', 'description', 'is_active')
