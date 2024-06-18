@@ -8,11 +8,14 @@ from django.views.generic import DetailView, ListView, CreateView, UpdateView, D
 from pytils.translit import slugify
 
 from catalog.forms import ProductForm, ProductModeratorForm
-from catalog.models import Product, Version
+from catalog.models import Product, Version, Category
+from catalog.services import get_categories_from_cache
 
 
 class ProductListView(LoginRequiredMixin, ListView):
     model = Product
+
+
 
     def get_context_data(self, *args, **kwargs):
         context_data = super().get_context_data(*args, **kwargs)
@@ -132,3 +135,16 @@ def contacts(request):
     return render(request, 'catalog/contacts_detail.html')
 
 
+class CategoryListView(LoginRequiredMixin, ListView):
+    """Класс для вывода списка категорий"""
+    model = Category
+    template_name = "catalog/categories_list.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        categories = Category.objects.all()
+        context_data['categories_list'] = categories
+        return context_data
+    #
+    def get_queryset(self):
+        return get_categories_from_cache()
